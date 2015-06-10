@@ -646,12 +646,15 @@ full_server_install() {
     fail "The automatic setup process requires sudo. Try again with option 2, development server, to customize."
   fi
 
+  DIR="${ROOT_DIR:-$DEFAULT_DIR_FOR_ROOT}"
+  DESIRED_SERVER_USER="${RUN_AS_USER:-$DEFAULT_SERVER_USER}"
+
   if [ "yes" != "${ACCEPTED_FULL_SERVER_INSTALL:-}" ]; then
     echo "We're going to:"
     echo ""
-    echo "* Install Sandstorm in $DEFAULT_DIR_FOR_ROOT"
+    echo "* Install Sandstorm in $DIR"
     echo "* Automatically keep Sandstorm up-to-date"
-    echo "* Create a service user ($DEFAULT_SERVER_USER) that owns Sandstorm's files"
+    echo "* Create a service user ($DESIRED_SERVER_USER) that owns Sandstorm's files"
     if [ "unknown" == "$INIT_SYSTEM" ]; then
       echo "*** WARNING: Could not detect how to run Sandstorm at startup on your system. ***"
     else
@@ -701,14 +704,12 @@ full_server_install() {
 
   # Accepting this indicates a few things.
   if [ "yes" = "${ACCEPTED_FULL_SERVER_INSTALL}" ]; then
-    UPDATE_CHANNEL="$DEFAULT_UPDATE_CHANNEL"
-    DIR="$DEFAULT_DIR_FOR_ROOT"
-    USE_EXTERNAL_INTERFACE="yes"
-    USE_SANDCATS="yes"
-    START_AT_BOOT="yes"
-    DESIRED_SERVER_USER="$DEFAULT_SERVER_USER"
-    PORT="6080"
-    MONGO_PORT="6081"
+    UPDATE_CHANNEL="${UPDATE_CHANNEL:-$DEFAULT_UPDATE_CHANNEL}"
+    USE_EXTERNAL_INTERFACE="${USE_EXTERNAL_INTERFACE:-yes}"
+    USE_SANDCATS="${USE_SANDCATS:-yes}"
+    START_AT_BOOT="${START_AT_BOOT:-yes}"
+    PORT="${PORT:-6080}"
+    MONGO_PORT="${MONGO_PORT:-6081}"
   else
     fail "If you prefer a more manual setup experience, try installing in development mode."
   fi
